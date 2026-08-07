@@ -2,9 +2,10 @@ from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
 
+# สถานะโต๊ะเริ่มต้น
 table_status = {
     "A1": "free",
-    "A2": "free"
+    "A2": "occupied"
 }
 
 @app.route("/")
@@ -15,5 +16,5 @@ def home():
 def status():
     return jsonify(table_status)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

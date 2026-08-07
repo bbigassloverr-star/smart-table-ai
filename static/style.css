@@ -1,25 +1,72 @@
 body {
-    font-family: Arial;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
     text-align: center;
-    margin-top: 50px;
+}
+
+h1 {
+    color: #222;
+    margin-bottom: 20px;
+}
+
+.summary {
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.tables {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .table {
-    width: 150px;
-    height: 150px;
-    margin: 20px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 220px;
+    height: 220px;
+    border-radius: 20px;
     color: white;
-    font-size: 24px;
-    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+.table h2 {
+    font-size: 42px;
+    margin: 0;
+}
+
+.table p {
+    font-size: 22px;
+    margin-top: 10px;
 }
 
 .free {
-    background: green;
+    background: #16a34a;
 }
 
 .occupied {
-    background: red;
+    background: #dc2626;
+}
+
+@media (max-width: 600px) {
+    .table {
+        width: 160px;
+        height: 160px;
+    }
+
+    .table h2 {
+        font-size: 32px;
+    }
 }
