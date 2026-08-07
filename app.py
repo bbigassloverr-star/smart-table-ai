@@ -13,15 +13,19 @@ table_status = {
     "B2": "free"
 }
 
-# จำลอง AI สุ่มสถานะโต๊ะ
+# ฟังก์ชันสุ่มสถานะโต๊ะ
 def auto_simulation():
     while True:
-        table = random.choice(list(table_status.keys()))
-        table_status[table] = random.choice(["free", "occupied"])
+        for table in table_status:
+            table_status[table] = random.choice(["free", "occupied"])
+
+        print("สุ่มสถานะใหม่:", table_status)
         time.sleep(5)
 
-# ทำงานเบื้องหลัง
-threading.Thread(target=auto_simulation, daemon=True).start()
+# เริ่ม Thread ทันที
+simulation_thread = threading.Thread(target=auto_simulation)
+simulation_thread.daemon = True
+simulation_thread.start()
 
 @app.route("/")
 def home():
