@@ -1,12 +1,27 @@
 from flask import Flask, jsonify, render_template
+import random
+import threading
+import time
 
 app = Flask(__name__)
 
-# สถานะโต๊ะเริ่มต้น
+# สถานะเริ่มต้นของโต๊ะ 4 ตัว
 table_status = {
     "A1": "free",
-    "A2": "occupied"
+    "A2": "free",
+    "B1": "free",
+    "B2": "free"
 }
+
+# จำลอง AI สุ่มสถานะโต๊ะ
+def auto_simulation():
+    while True:
+        table = random.choice(list(table_status.keys()))
+        table_status[table] = random.choice(["free", "occupied"])
+        time.sleep(5)
+
+# ทำงานเบื้องหลัง
+threading.Thread(target=auto_simulation, daemon=True).start()
 
 @app.route("/")
 def home():
