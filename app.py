@@ -13,13 +13,27 @@ table_status = {
     "B2": "free"
 }
 
-# ฟังก์ชันสุ่มสถานะโต๊ะ
+# ฟังก์ชันสุ่มสถานะแบบสมจริง
 def auto_simulation():
-    while True:
-        for table in table_status:
-            table_status[table] = random.choice(["free", "occupied"])
+    tables = list(table_status.keys())
 
-        print("สุ่มสถานะใหม่:", table_status)
+    while True:
+        # เริ่มจากว่างทั้งหมดก่อน
+        for table in tables:
+            table_status[table] = "free"
+
+        # สุ่มว่าจะมีคนนั่งกี่โต๊ะ (1-3 โต๊ะ)
+        occupied_count = random.randint(1, 3)
+
+        # สุ่มเลือกโต๊ะที่จะมีคนนั่ง
+        occupied_tables = random.sample(tables, occupied_count)
+
+        for table in occupied_tables:
+            table_status[table] = "occupied"
+
+        print("สถานะใหม่:", table_status)
+
+        # เปลี่ยนทุก 5 วินาที
         time.sleep(5)
 
 # เริ่ม Thread ทันที
