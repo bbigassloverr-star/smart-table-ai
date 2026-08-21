@@ -1,30 +1,49 @@
 from flask import Flask, jsonify, render_template
-import random
+from threading import Lock
 
 app = Flask(__name__)
 
-# โต๊ะทั้งหมด
-TABLES = ["A1", "A2", "B1", "B2"]
+# สถานะโต๊ะที่ AI ส่งเข้ามา
+table_status = {
+    "A1": "free",
+    "A2": "free",
+    "B1": "free",
+    "B2": "free"
+}
+
+status_lock = Lock()
+
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
+
 @app.route("/api/status")
 def status():
-    # เริ่มจากว่างทั้งหมด
-    table_status = {table: "free" for table in TABLES}
+    with status_lock:
+        return jsonify(table_status)
 
-    # สุ่มว่าจะมีคนนั่งกี่โต๊ะ (1-3 โต๊ะ)
-    occupied_count = random.randint(1, 3)
 
-    # สุ่มเลือกโต๊ะที่มีคนนั่ง
-    occupied_tables = random.sample(TABLES, occupied_count)
+@app.route("/api/update", methods=["POST"])
+def update_status():
+    from flask import request
 
-    for table in occupied_tables:
-        table_status[table] = "occupied"
+    data = request.get_json()
 
-    return jsonify(table_status)
+    if not isinstance(data, dict):
+        return jsonify({"error": "invalid data"}), 400
+
+    with status_lock:
+        for table in table_status:
+            if table in data and data[table] in ["free", "occupied"]:
+                table_status[table] = data[table]
+
+    return jsonify({
+        "success": True,
+        "tables": table_status
+    })
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

@@ -1,24 +1,25 @@
 import cv2
 
-for i in range(5):
-    print(f"กำลังทดสอบ Camera {i}")
+camera = cv2.VideoCapture(0)
 
-    cap = cv2.VideoCapture(i)
+if not camera.isOpened():
+    print("ไม่สามารถเปิดกล้องได้")
+    exit()
 
-    if cap.isOpened():
-        ret, frame = cap.read()
+print("เปิดกล้องสำเร็จ")
+print("กด Q เพื่อปิด")
 
-        if ret and frame is not None:
-            print(f"Camera {i} ใช้งานได้")
+while True:
+    ret, frame = camera.read()
 
-            cv2.imshow(f"Camera {i}", frame)
-            key = cv2.waitKey(3000)  # แสดง 3 วินาที
-            cv2.destroyAllWindows()
-        else:
-            print(f"Camera {i} เปิดได้แต่ภาพไม่ได้")
-    else:
-        print(f"Camera {i} เปิดไม่ได้")
+    if not ret:
+        print("อ่านภาพจากกล้องไม่ได้")
+        break
 
-    cap.release()
+    cv2.imshow("Camera Test", frame)
 
-print("เสร็จแล้ว")
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+camera.release()
+cv2.destroyAllWindows()
